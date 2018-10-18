@@ -1,11 +1,13 @@
 from PorterStemmer import PorterStemmer
 import math
-
 class Document:
-    def __init__(self,title,originalDoc,terms):
+    def __init__(self,title,originalDoc,terms,isExtension):
         self.title=title
         self.tfidf={}
-        self.originalDoc=originalDoc
+        if(isExtension):
+            self.originalDoc=originalDoc
+        else:
+            self.originalDoc=title+" "+originalDoc
         wordsList=self.stemming(self.firstStep())
         self.bagOfWords=self.createBagOfWords(wordsList,terms)
         self.finalDoc=self.createDisplayVersion(wordsList)

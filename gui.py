@@ -10,7 +10,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QFileDialog
 from Browser import Browser
 from PyQt5.QtWidgets import QMessageBox
-
+from Query import Query
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -27,10 +27,10 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
-        self.textEdit.setGeometry(QtCore.QRect(40, 20, 751, 31))
+        self.textEdit.setGeometry(QtCore.QRect(20, 20, 701, 31))
         self.textEdit.setObjectName("textEdit")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(810, 20, 75, 31))
+        self.pushButton.setGeometry(QtCore.QRect(730, 20, 75, 31))
         self.pushButton.setObjectName("pushButton")
         self.pushButton.clicked.connect(self.search)
 
@@ -44,6 +44,10 @@ class Ui_MainWindow(object):
         self.listWidget.setObjectName("listWidget")
         self.listWidget.clicked.connect(self.onItemSelect)
 
+        self.checkBox = QtWidgets.QCheckBox(self.centralwidget)
+        self.checkBox.setGeometry(QtCore.QRect(840, 19, 121, 31))
+        self.checkBox.setObjectName("checkBox")
+        self.checkBox.clicked.connect(self.onCheckBoxChange)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -78,6 +82,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "Browser"))
         self.pushButton.setText(_translate("MainWindow", "Search"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
+        self.checkBox.setText(_translate("MainWindow", "Query extension"))
         self.actionOpen_documents.setText(_translate("MainWindow", "Open documents"))
         self.actionOpen_terms.setText(_translate("MainWindow", "Open keywords"))
 
@@ -90,25 +95,34 @@ class Ui_MainWindow(object):
                 item.setData(1,i[0])
                 item.setText(i[2])
                 self.listWidget.addItem(item)
-
-
+        queryObject = Query(self.textEdit.toPlainText())
 
 
     def docOpen(self):
         options = QFileDialog.Options()
         self.docName, _ = QFileDialog.getOpenFileName(None, "Choose file with documents", "",
                                                   "All Files (*)", options=options)
-        if((self.keywordsName!='') & (self.docName!='')):
-            self.flag=1
-            self.browser =Browser(self.keywordsName,self.docName)
+        self.createBrowser()
 
     def termOpen(self):
        options = QFileDialog.Options()
        self.keywordsName, _ = QFileDialog.getOpenFileName(None, "Choose file with keywords", "",
                                                           "All Files (*)", options=options)
-       if ((self.keywordsName != '') & (self.docName != '')):
-           self.flag = 1
-           self.browser=Browser(self.keywordsName, self.docName)
+       self.createBrowser()
+
+
+
+    def createBrowser(self):
+        self.listWidget.clear()
+        if ((self.keywordsName != '') & (self.docName != '')):
+            self.flag = 1
+            print(self.checkBox.isChecked())
+            self.browser = Browser(self.keywordsName, self.docName,self.checkBox.isChecked())
+
+
+
+    def onCheckBoxChange(self):
+        self.createBrowser()
 
     def onItemSelect(self):
         item=self.listWidget.currentItem()

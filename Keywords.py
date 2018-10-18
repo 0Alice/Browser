@@ -15,7 +15,6 @@ class Keywords:
         return stemList
 
     def readFile(self,name):
-        #'C:\\Users\\Ania\\Desktop\\keywords.txt'
         file = open(name)
         try:
             text = file.readlines()

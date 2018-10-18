@@ -6,10 +6,10 @@ from PorterStemmer import PorterStemmer
 
 
 class Browser:
-    def __init__(self,keywordsName,docName):
+    def __init__(self,keywordsName,docName,isExtension):
         self.keywords=Keywords(keywordsName)
 
-        self.docList=self.readDocs(docName) #stworzenie dokumentu
+        self.docList=self.readDocs(docName,isExtension) #stworzenie dokumentu
 
         self.keywords.calculateTermsIDF(self.docList)
         self.query = None
@@ -19,8 +19,7 @@ class Browser:
             doc.calculateTFIDF(self.keywords.termsIDF)
 
 
-    def readDocs(self,name):
-        #'C:\\Users\\Ania\\Desktop\\documents.txt'
+    def readDocs(self,name,isExtension):
         file = open(name)
         try:
             text = file.readlines()
@@ -34,13 +33,15 @@ class Browser:
         for line in text:
             counter+=1
             if(line==emptyLine):
-                docList.append(Document(firstLine,singleDoc,self.keywords.terms))
+                docList.append(Document(firstLine,singleDoc,self.keywords.terms,isExtension))
                 singleDoc=""
                 counter=0
             else:
-                singleDoc=singleDoc+line
-            if (counter == 1):
-                firstLine = line
+                if (counter == 1):
+                    firstLine = line
+                else:
+                    singleDoc=singleDoc+line
+
 
         return docList
 
@@ -57,7 +58,7 @@ class Browser:
         return sumOfSame/(dl*ql)
 
     def documentsSimilarityList(self,queryString):
-        self.query=Document("query",queryString,self.keywords.terms)
+        self.query=Document("",queryString,self.keywords.terms,True)
         self.query.calculateTFIDF(self.keywords.termsIDF)
         similarityList=[]
         for doc in self.docList:
