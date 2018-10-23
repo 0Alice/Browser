@@ -1,4 +1,5 @@
 from collections import Counter
+from nltk.corpus import wordnet as wn
 
 from Document import Document
 
@@ -15,10 +16,17 @@ class Query(Document) :
         for key in self.wordSet:
             if(key in coincidenceMatrix):
                 allCoincidenceWords[key]=0
-
-        for key,value in dict(Counter(allCoincidenceWords).most_common(10)).items():
-            self.extension.append([key,str(value),key+"\t"+str(value)])
-        print(self.extension)
+        self.extension=[]
+        if(not bool(allCoincidenceWords)):
+            for query in self.wordSet:
+                synset=wn.synsets(query)
+                for synonyms in synset:
+                    for key in synonyms.lemmas():
+                        if(key.name()!=query):
+                            self.extension.append([key.name(),0,key.name()+"\t0"])
+        else:
+            for key,value in dict(Counter(allCoincidenceWords).most_common(10)).items():
+                self.extension.append([key,value,key+"\t"+str(value)])
         
 '''
 from textblob import Word
