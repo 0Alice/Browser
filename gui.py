@@ -50,7 +50,7 @@ class Ui_MainWindow(object):
         self.checkBox.clicked.connect(self.onCheckBoxChange)
 
         self.smallListWidget = QtWidgets.QListWidget(self.centralwidget)
-        self.smallListWidget.setGeometry(QtCore.QRect(730, 70, 231, 210))
+        self.smallListWidget.setGeometry(QtCore.QRect(730, 70, 231, 731))
         self.smallListWidget.setObjectName("smallListWidget")
         self.smallListWidget.clicked.connect(self.onSmallItemSelect)
 
