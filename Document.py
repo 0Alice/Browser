@@ -1,5 +1,7 @@
 from PorterStemmer import PorterStemmer
 import math
+from nltk.corpus import stopwords
+
 class Document:
     def __init__(self,title,originalDoc,terms,isExtension):
         self.title=title
@@ -9,7 +11,9 @@ class Document:
         else:
             self.originalDoc=title+" "+originalDoc
         wordsList=self.stemming(self.firstStep())
-        self.wordSet=set(wordsList)
+        wordSet=set(wordsList)
+        stopWords = set(stopwords.words('english'))
+        self.wordSet = [x for x in wordSet if x not in stopWords]
         self.bagOfWords=self.createBagOfWords(wordsList,terms)
         self.finalDoc=self.createDisplayVersion(wordsList)
 

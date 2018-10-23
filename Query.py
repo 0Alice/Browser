@@ -1,5 +1,4 @@
 from collections import Counter
-from nltk.corpus import stopwords
 
 from Document import Document
 
@@ -9,17 +8,16 @@ class Query(Document) :
         self.extension=[]
 
     def getExtesion(self,coincidenceMatrix):
-        stopWords = set(stopwords.words('english'))
         allCoincidenceWords={}
         for key in self.wordSet:
-            if(key in coincidenceMatrix and (key not in stopWords)):
+            if(key in coincidenceMatrix):
                 allCoincidenceWords={ k: allCoincidenceWords.get(k, 0) + coincidenceMatrix[key].get(k, 0) for k in set(allCoincidenceWords) | set(coincidenceMatrix[key])}
         for key in self.wordSet:
-            if(key in coincidenceMatrix and (key not in stopWords)):
+            if(key in coincidenceMatrix):
                 allCoincidenceWords[key]=0
 
         for key,value in dict(Counter(allCoincidenceWords).most_common(10)).items():
-            self.extension.append(key+"\t"+str(value))
+            self.extension.append([key,str(value),key+"\t"+str(value)])
         print(self.extension)
         
 '''
