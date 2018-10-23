@@ -89,13 +89,15 @@ class Ui_MainWindow(object):
     def search(self):
         self.listWidget.clear()
         if(self.flag==1):
-            self.browser.documentsSimilarityList(self.textEdit.toPlainText())
+            queryObject = Query(self.textEdit.toPlainText(),self.browser.keywords.terms,self.checkBox.isChecked())
+            if(self.checkBox.isChecked()):
+                queryObject.getExtesion(self.browser.coincidenceMatrix)
+            self.browser.documentsSimilarityList(queryObject)
             for i in self.browser.similarityList:
                 item = QtWidgets.QListWidgetItem()
                 item.setData(1,i[0])
                 item.setText(i[2])
                 self.listWidget.addItem(item)
-        queryObject = Query(self.textEdit.toPlainText())
 
 
     def docOpen(self):

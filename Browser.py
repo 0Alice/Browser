@@ -14,10 +14,23 @@ class Browser:
         self.keywords.calculateTermsIDF(self.docList)
         self.query = None
         self.similarityList=None
-
         for doc in self.docList:
             doc.calculateTFIDF(self.keywords.termsIDF)
+        self.createCoincidenceMatrix()
 
+    def createCoincidenceMatrix(self):
+        coincidenceMatrix={}
+        for doc in self.docList:
+            for w1 in doc.wordSet:
+                if(w1 not in coincidenceMatrix):
+                    coincidenceMatrix[w1]={}
+                for w2 in doc.wordSet:
+                    if(w1!=w2):
+                        if(w2 in coincidenceMatrix[w1]):
+                            coincidenceMatrix[w1][w2]+=1
+                        else:
+                            coincidenceMatrix[w1][w2]=1
+        self.coincidenceMatrix=coincidenceMatrix
 
     def readDocs(self,name,isExtension):
         file = open(name)
@@ -57,8 +70,8 @@ class Browser:
             return 0
         return sumOfSame/(dl*ql)
 
-    def documentsSimilarityList(self,queryString):
-        self.query=Document("",queryString,self.keywords.terms,True)
+    def documentsSimilarityList(self,queryObject):
+        self.query=queryObject
         self.query.calculateTFIDF(self.keywords.termsIDF)
         similarityList=[]
         for doc in self.docList:

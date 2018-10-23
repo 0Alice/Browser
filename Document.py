@@ -9,6 +9,7 @@ class Document:
         else:
             self.originalDoc=title+" "+originalDoc
         wordsList=self.stemming(self.firstStep())
+        self.wordSet=set(wordsList)
         self.bagOfWords=self.createBagOfWords(wordsList,terms)
         self.finalDoc=self.createDisplayVersion(wordsList)
 
