@@ -1,8 +1,11 @@
+from nltk.corpus import stopwords
+import math
+from operator import itemgetter
+
+from PorterStemmer import PorterStemmer
+
 from Document import Document
 from Keywords import Keywords
-from operator import itemgetter
-import math
-from PorterStemmer import PorterStemmer
 
 
 class Browser:
@@ -19,17 +22,19 @@ class Browser:
         self.createCoincidenceMatrix()
 
     def createCoincidenceMatrix(self):
+        stopWords = set(stopwords.words('english'))
         coincidenceMatrix={}
         for doc in self.docList:
             for w1 in doc.wordSet:
-                if(w1 not in coincidenceMatrix):
-                    coincidenceMatrix[w1]={}
-                for w2 in doc.wordSet:
-                    if(w1!=w2):
-                        if(w2 in coincidenceMatrix[w1]):
-                            coincidenceMatrix[w1][w2]+=1
-                        else:
-                            coincidenceMatrix[w1][w2]=1
+                if(w1 not in stopWords):
+                    if(w1 not in coincidenceMatrix):
+                        coincidenceMatrix[w1]={}
+                    for w2 in doc.wordSet:
+                        if(w1!=w2 and (w2 not in stopWords)):
+                            if(w2 in coincidenceMatrix[w1]):
+                                coincidenceMatrix[w1][w2]+=1
+                            else:
+                                coincidenceMatrix[w1][w2]=1
         self.coincidenceMatrix=coincidenceMatrix
 
     def readDocs(self,name,isExtension):
