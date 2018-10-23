@@ -33,14 +33,14 @@ class Ui_MainWindow(object):
         self.pushButton.setGeometry(QtCore.QRect(730, 20, 75, 31))
         self.pushButton.setObjectName("pushButton")
         self.pushButton.clicked.connect(self.search)
-
+        # self.textEdit.textChanged.connect(self.onTextChanged)
         '''self.listView = QtWidgets.QListView(self.centralwidget)
         self.listView.setGeometry(QtCore.QRect(15, 71, 951, 731))
         self.listView.setObjectName("listView")
         self.listView.clicked.connect(self.onItemSelect)
 '''
         self.listWidget=QtWidgets.QListWidget(self.centralwidget)
-        self.listWidget.setGeometry(QtCore.QRect(15, 71, 951, 731))
+        self.listWidget.setGeometry(QtCore.QRect(15, 71, 701, 731))
         self.listWidget.setObjectName("listWidget")
         self.listWidget.clicked.connect(self.onItemSelect)
 
@@ -48,6 +48,13 @@ class Ui_MainWindow(object):
         self.checkBox.setGeometry(QtCore.QRect(840, 19, 121, 31))
         self.checkBox.setObjectName("checkBox")
         self.checkBox.clicked.connect(self.onCheckBoxChange)
+
+        self.smallListWidget = QtWidgets.QListWidget(self.centralwidget)
+        self.smallListWidget.setGeometry(QtCore.QRect(730, 70, 231, 210))
+        self.smallListWidget.setObjectName("smallListWidget")
+        self.smallListWidget.clicked.connect(self.onSmallItemSelect)
+
+
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -88,16 +95,23 @@ class Ui_MainWindow(object):
 
     def search(self):
         self.listWidget.clear()
+        self.smallListWidget.clear()
         if(self.flag==1):
-            queryObject = Query(self.textEdit.toPlainText(),self.browser.keywords.terms,self.checkBox.isChecked())
+            self.queryObject = Query(self.textEdit.toPlainText(),self.browser.keywords.terms,self.checkBox.isChecked())
             if(self.checkBox.isChecked()):
-                queryObject.getExtesion(self.browser.coincidenceMatrix)
-            self.browser.documentsSimilarityList(queryObject)
+                self.queryObject.getExtesion(self.browser.coincidenceMatrix)
+                for i in self.queryObject.extension:
+                    item = QtWidgets.QListWidgetItem()
+                    item.setData(1, i[0])
+                    item.setText(i[2])
+                    self.smallListWidget.addItem(item)
+            self.browser.documentsSimilarityList(self.queryObject)
             for i in self.browser.similarityList:
                 item = QtWidgets.QListWidgetItem()
                 item.setData(1,i[0])
                 item.setText(i[2])
                 self.listWidget.addItem(item)
+
 
 
     def docOpen(self):
@@ -124,6 +138,7 @@ class Ui_MainWindow(object):
 
 
     def onCheckBoxChange(self):
+        self.smallListWidget.clear()
         self.createBrowser()
 
     def onItemSelect(self):
@@ -133,6 +148,13 @@ class Ui_MainWindow(object):
         msg.setWindowTitle(item.data(1).title)
         msg.setText("Original: \n\n"+item.data(1).originalDoc+"\n\n\n\nAfter stemming:\n\n"+item.data(1).finalDoc)
         msg.exec()
+
+    def onSmallItemSelect(self):
+        item = self.smallListWidget.currentItem()
+        newQuery = self.textEdit.toPlainText() + " " + item.data(1)
+        self.textEdit.clear()
+        self.textEdit.setText(newQuery)
+        self.search()
 
 
 
