@@ -7,9 +7,8 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QFileDialog, QMessageBox
 from Browser import Browser
-from PyQt5.QtWidgets import QMessageBox
 from Query import Query
 
 class Ui_MainWindow(object):
