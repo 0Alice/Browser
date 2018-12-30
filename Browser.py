@@ -28,9 +28,9 @@ class Browser:
                 if self.kNNiteration():
                     break
             for c in self.centroids:
-                self.groups.append([e.title for e in c.copyOfElements])
+                self.groups.append(c.copyOfElements)
         for g in self.groups:
-            print(g)
+            print([e.title for e in g])
 
     def kNNiteration(self):
         def argmax(iterable):
