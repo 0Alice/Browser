@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>20</y>
+      <y>70</y>
       <width>701</width>
       <height>31</height>
      </rect>
@@ -28,7 +28,7 @@
     <property name="geometry">
      <rect>
       <x>730</x>
-      <y>20</y>
+      <y>70</y>
       <width>75</width>
       <height>31</height>
      </rect>
@@ -41,9 +41,9 @@
     <property name="geometry">
      <rect>
       <x>15</x>
-      <y>71</y>
-      <width>951</width>
-      <height>731</height>
+      <y>121</y>
+      <width>701</width>
+      <height>681</height>
      </rect>
     </property>
    </widget>
@@ -51,13 +51,82 @@
     <property name="geometry">
      <rect>
       <x>840</x>
-      <y>19</y>
+      <y>70</y>
       <width>121</width>
       <height>31</height>
      </rect>
     </property>
     <property name="text">
      <string>Query extension</string>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="listWidget">
+    <property name="geometry">
+     <rect>
+      <x>730</x>
+      <y>120</y>
+      <width>231</width>
+      <height>681</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="textEdit_2">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>20</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="textEdit_3">
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>20</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>20</y>
+      <width>20</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>K</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>20</y>
+      <width>91</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Max iterations</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>730</x>
+      <y>20</y>
+      <width>75</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Run k-NN</string>
     </property>
    </widget>
   </widget>

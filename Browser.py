@@ -10,7 +10,7 @@ from Centroid import Centroid
 
 
 class Browser:
-    def __init__(self, keywordsName, docName, isExtension, k=0, maxIterations=1):
+    def __init__(self, keywordsName, docName, isExtension):
         self.keywords = Keywords(keywordsName)
 
         self.docList = self.readDocs(docName, isExtension)
@@ -21,6 +21,8 @@ class Browser:
         for doc in self.docList:
             doc.calculateTFIDF(self.keywords.termsIDF)
         self.createCoincidenceMatrix()
+
+    def runKNN(self, k=0, maxIterations=1):
         self.groups=[]
         if(k > 0):
             self.centroids = [Centroid(secrets.choice(self.docList).tfidf) for i in range(k)]

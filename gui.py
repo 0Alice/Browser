@@ -26,11 +26,13 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
-        self.textEdit.setGeometry(QtCore.QRect(20, 20, 701, 31))
+        self.textEdit.setGeometry(QtCore.QRect(15, 70, 701, 31))
         self.textEdit.setObjectName("textEdit")
+
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(730, 20, 75, 31))
+        self.pushButton.setGeometry(QtCore.QRect(730, 70, 75, 31))
         self.pushButton.setObjectName("pushButton")
+
         self.pushButton.clicked.connect(self.search)
         # self.textEdit.textChanged.connect(self.onTextChanged)
         '''self.listView = QtWidgets.QListView(self.centralwidget)
@@ -39,20 +41,40 @@ class Ui_MainWindow(object):
         self.listView.clicked.connect(self.onItemSelect)
 '''
         self.listWidget=QtWidgets.QListWidget(self.centralwidget)
-        self.listWidget.setGeometry(QtCore.QRect(15, 71, 701, 731))
+        self.listWidget.setGeometry(QtCore.QRect(15, 121, 701, 731))
         self.listWidget.setObjectName("listWidget")
         self.listWidget.clicked.connect(self.onItemSelect)
 
         self.checkBox = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkBox.setGeometry(QtCore.QRect(840, 19, 121, 31))
+        self.checkBox.setGeometry(QtCore.QRect(840, 70, 121, 31))
         self.checkBox.setObjectName("checkBox")
         self.checkBox.clicked.connect(self.onCheckBoxChange)
 
         self.smallListWidget = QtWidgets.QListWidget(self.centralwidget)
-        self.smallListWidget.setGeometry(QtCore.QRect(730, 70, 231, 731))
+        self.smallListWidget.setGeometry(QtCore.QRect(730, 120, 231, 731))
         self.smallListWidget.setObjectName("smallListWidget")
         self.smallListWidget.clicked.connect(self.onSmallItemSelect)
 
+        self.textEdit_2 = QtWidgets.QTextEdit(self.centralwidget)
+        self.textEdit_2.setGeometry(QtCore.QRect(140, 20, 131, 31))
+        self.textEdit_2.setObjectName("textEdit_2")
+
+        self.textEdit_3 = QtWidgets.QTextEdit(self.centralwidget)
+        self.textEdit_3.setGeometry(QtCore.QRect(490, 20, 131, 31))
+        self.textEdit_3.setObjectName("textEdit_3")
+
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(110, 20, 20, 20))
+        self.label.setObjectName("label")
+
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(400, 20, 91, 20))
+        self.label_2.setObjectName("label_2")
+
+        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_2.setGeometry(QtCore.QRect(730, 20, 75, 31))
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.pushButton_2.clicked.connect(self.runKnn)
 
 
         MainWindow.setCentralWidget(self.centralwidget)
@@ -91,6 +113,9 @@ class Ui_MainWindow(object):
         self.checkBox.setText(_translate("MainWindow", "Query extension"))
         self.actionOpen_documents.setText(_translate("MainWindow", "Open documents"))
         self.actionOpen_terms.setText(_translate("MainWindow", "Open keywords"))
+        self.label.setText(_translate("MainWindow", "K"))
+        self.label_2.setText(_translate("MainWindow", "Max iterations"))
+        self.pushButton_2.setText(_translate("MainWindow", "Run k-NN"))
 
     def search(self):
         self.listWidget.clear()
@@ -111,6 +136,23 @@ class Ui_MainWindow(object):
                 item.setText(i[2])
                 self.listWidget.addItem(item)
 
+    def runKnn(self):
+        if(self.textEdit_2.toPlainText()!="" and self.textEdit_3.toPlainText()!=""):
+            self.listWidget.clear()
+            self.smallListWidget.clear()
+            if(self.flag==1):
+                self.browser.runKNN(int(self.textEdit_2.toPlainText()),int(self.textEdit_3.toPlainText()))
+                counter=0
+                for i in self.browser.groups:
+                    item = QtWidgets.QListWidgetItem()
+                    item.setText("Group "+str(counter))
+                    self.listWidget.addItem(item)
+                    for d in i:
+                        item = QtWidgets.QListWidgetItem()
+                        item.setData(1,d)
+                        item.setText(d.title)
+                        self.listWidget.addItem(item)
+                    counter+=1
 
 
     def docOpen(self):
@@ -142,11 +184,12 @@ class Ui_MainWindow(object):
 
     def onItemSelect(self):
         item=self.listWidget.currentItem()
-        msg = QMessageBox()
-        msg.setGeometry(QtCore.QRect(15, 71, 951, 731))
-        msg.setWindowTitle(item.data(1).title)
-        msg.setText("Original: \n\n"+item.data(1).originalDoc+"\n\n\n\nAfter stemming:\n\n"+item.data(1).finalDoc)
-        msg.exec()
+        if(item.data(1)!=None):
+            msg = QMessageBox()
+            msg.setGeometry(QtCore.QRect(15, 71, 951, 731))
+            msg.setWindowTitle(item.data(1).title)
+            msg.setText("Original: \n\n"+item.data(1).originalDoc+"\n\n\n\nAfter stemming:\n\n"+item.data(1).finalDoc)
+            msg.exec()
 
     def onSmallItemSelect(self):
         item = self.smallListWidget.currentItem()
